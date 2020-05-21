@@ -30,7 +30,7 @@ public class SearchController {
 
     @PostMapping("/index")
     public String index(@RequestParam(value = "uri") String uri) {
-        int recursion = 2;
+        int recursion = 3;
 
         searchService.indexing(uri, recursion);
 

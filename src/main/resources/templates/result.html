@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.twbsPagination.js"></script>
+    <script src="js/getResult.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div style="margin-top: 50px">
+        <form class="form-inline my-2 my-lg-0" style="margin-left: 150px" method="post" th:action="@{/search}">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" th:name="query">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+
+    <h3>Result of Search</h3>
+    <p></p>
+    <div class="card-wrapper"></div>
+    <p></p>
+
+    <div>
+        <h6>Card title</h6>
+        <a href="#">Card link</a>
+        <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+
+    <div class="container">
+        <nav aria-label="Page navigation">
+            <ul class="pagination" id="pagination"></ul>
+        </nav>
+    </div>
+</div>
+</body>
+</html>

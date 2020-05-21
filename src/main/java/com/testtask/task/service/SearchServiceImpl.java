@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,38 +36,39 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public void indexing(String url, int recursion) {
-        int step = recursion - 1;
-
-        if (!searchRepository.addUrl(url)) {
-            return;
-        }
-        textExtractor.getDataOfPage(url).ifPresent(dataOfPage -> {
-            writeDocument(dataOfPage);
-
-            if (step != 0) {
-//                ExecutorService service = Executors.newFixedThreadPool(4);
-
-                for (String urlFromPage : dataOfPage.getUrls()) {
-//                    service.execute(() -> {
-                        indexing(urlFromPage, step);
-//                    });
-                }
-            }
-        });
-    }
-
-    private void writeDocument(DataOfPage data) {
         try (Directory memoryIndex = new MMapDirectory(Paths.get("c:\\index\\"))) {
             IndexWriterConfig indexWriterConfig = new IndexWriterConfig(new StandardAnalyzer());
 
             try (IndexWriter writer = new IndexWriter(memoryIndex, indexWriterConfig)) {
-                Document document = getDocument(data);
-                writer.addDocument(document);
+                indexingDocuments(writer, url, recursion);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void indexingDocuments(IndexWriter writer, String url, int recursion) throws IOException {
+        int step = recursion - 1;
+
+        if (!searchRepository.addUrl(url)) {
+            return;
+        }
+        Optional<DataOfPage> dataOfPage = textExtractor.getDataOfPage(url);
+
+        if (dataOfPage.isPresent()) {
+            writer.addDocument(getDocument(dataOfPage.get()));
+
+            if (step != 0) {
+                ExecutorService service = Executors.newFixedThreadPool(10);
+
+                for (String urlFromPage : dataOfPage.get().getUrls()) {
+                    service.execute(() -> {
+                        indexing(urlFromPage, step);
+                    });
+                }
+            }
         }
     }
 
