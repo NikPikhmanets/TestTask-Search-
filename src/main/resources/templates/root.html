@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Task</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div style="margin-top: 150px">
+    <form class="form-inline my-2 my-lg-0" style="margin-left: 150px" method="post"  th:action="@{/search}">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" th:name="query">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</div>
+</body>
+</html>

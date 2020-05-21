@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Task</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="margin-top: 150px">
+<form class="form-inline" th:action="@{/index}" method="post">
+    <div class="form-group mb-2" style="margin-left: 150px">
+        <label for="validUri" class="sr-only">URI</label>
+        <input type="text" readonly class="form-control-plaintext" id="validUri" value="http://www.ukr.net"
+               th:name="uri">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Indexing</button>
+</form>
+</body>
+</html>
