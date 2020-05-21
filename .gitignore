@@ -1,3 +1,19 @@
+#idea files
+.idea/
+*.iml
+
+# gradle build
+.gradle/
+build/
+out/
+
+node-wrapper.log
+node_modules/
+**/dist/
+.node/
+static/
+/logs/
+
 # Compiled class file
 *.class
 
