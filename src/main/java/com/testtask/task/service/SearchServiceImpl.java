@@ -6,18 +6,15 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.index.*;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.MMapDirectory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,12 +44,12 @@ public class SearchServiceImpl implements SearchService {
             writeDocument(dataOfPage);
 
             if (step != 0) {
-                ExecutorService service = Executors.newFixedThreadPool(4);
+//                ExecutorService service = Executors.newFixedThreadPool(4);
 
                 for (String urlFromPage : dataOfPage.getUrls()) {
-                    service.execute(() -> {
+//                    service.execute(() -> {
                         indexing(urlFromPage, step);
-                    });
+//                    });
                 }
             }
         });
@@ -96,19 +93,19 @@ public class SearchServiceImpl implements SearchService {
     }
 
     public List<Document> searchIndex(Query query) {
-//        try {
-//            IndexReader indexReader = DirectoryReader.open(memoryIndex);
-//            IndexSearcher searcher = new IndexSearcher(indexReader);
-//            TopDocs topDocs = searcher.search(query, 10);
-//            List<Document> documents = new ArrayList<>();
-//            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
-//                documents.add(searcher.doc(scoreDoc.doc));
-//            }
-//
-//            return documents;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try (Directory memoryIndex = new MMapDirectory(Paths.get("c:\\index\\"))) {
+            IndexReader indexReader = DirectoryReader.open(memoryIndex);
+            IndexSearcher searcher = new IndexSearcher(indexReader);
+            TopDocs topDocs = searcher.search(query, 10);
+            List<Document> documents = new ArrayList<>();
+
+            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+                documents.add(searcher.doc(scoreDoc.doc));
+            }
+            return documents;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
